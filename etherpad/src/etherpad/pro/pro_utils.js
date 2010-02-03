@@ -45,12 +45,16 @@ function getProRequestSubdomain() {
 }
 
 function getRequestSuperdomain() {
+  var SUPERDOMAINS = get_superdomains();
   var parts = request.domain.split('.');
-  parts.reverse();
-  if (parts[0] == ".") {
-    parts.shift();
+  /* Loop through the domain until a superdomain is found. */
+  while (parts.length > 0) {
+    var domain = parts.join('.');
+    if (SUPERDOMAINS[domain]) {
+      return domain;
+    }
+    parts.shift(); // remove next level
   }
-  return [parts[1], parts[0]].join('.');
 }
 
 function isProDomainRequest() {
